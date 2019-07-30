@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProAgil.WebAPI.Data;
+using ProAgil.WebAPI.Models;
 
 namespace ProAgil.WebAPI.Controllers
 {
@@ -10,18 +13,39 @@ namespace ProAgil.WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public DataContext _context { get; }
+        public ValuesController(DataContext context)
+        {
+            _context = context;
+        }
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var list = _context.Events.ToList();
+                return Ok(list);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Server error");
+            }
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            try
+            {
+                var obj = _context.Events.FirstOrDefault(x => x.Id == id);
+                return Ok(obj);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Server error");
+            }
         }
 
         // POST api/values
