@@ -1,20 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProAgil.WebAPI.Models
 {
-    public class Event
+    public class Speaker
     {
         public int Id { get; set; }
-        public string Place { get; set; }
-        public DateTime EventDate { get; set; }
-        public string Theme { get; set; }
-        public int QtdPeople { get; set; }
+        public string Name { get; set; }
+        public string Resume { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public List<Allotment> Allotments { get; set; }
         public List<SocialNetwork> SocialsNetwork { get; set; }
         public List<SpeakerEvent> SpeakerEvents { get; set; }
     }
