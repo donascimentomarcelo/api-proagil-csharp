@@ -11,5 +11,15 @@ namespace ProAgil.WebAPI.Data
         }
 
         public DbSet<Event> Events { get; set; }
+        public DbSet<Speaker> Speakers { get; set; }
+        public DbSet<SpeakerEvent> SpeakerEvents { get; set; }
+        public DbSet<Allotment> Allotments { get; set; }
+        public DbSet<SocialNetwork> SocialNetworks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        {
+            modelBuilder.Entity<SpeakerEvent>()
+                .HasKey(SE => new { SE.EventId, SE.SpeakerId });
+        }
     }
 }

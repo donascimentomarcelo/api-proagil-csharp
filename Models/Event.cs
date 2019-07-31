@@ -15,7 +15,7 @@ namespace ProAgil.WebAPI.Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public List<Allotment> Allotments { get; set; }
-        public List<SocialNetwork> SocialsNetwork { get; set; }
+        public List<SocialNetwork> SocialNetworks { get; set; }
         public List<SpeakerEvent> SpeakerEvents { get; set; }
     }
 }
