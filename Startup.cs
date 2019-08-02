@@ -28,7 +28,7 @@ namespace ProAgil.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(
-                x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+                x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
             );
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
