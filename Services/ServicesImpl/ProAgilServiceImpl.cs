@@ -45,9 +45,22 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
 
                 return await query.ToArrayAsync();
         }
-        public Task<Event[]> GetAllEventAsyncByTheme(string theme, bool includeSpeakers)
+        public async Task<Event[]> GetAllEventAsyncByTheme(string theme, bool includeSpeakers)
         {
-            throw new System.NotImplementedException();
+            IQueryable<Event> query = _context.Events
+                .Include(c => c.Allotments)
+                .Include(c => c.SocialNetworks);
+
+                if (includeSpeakers) {
+                    query = query
+                    .Include(pe => pe.SpeakerEvents)
+                    .ThenInclude(p => p.Speaker)
+                }
+
+                query = query.OrderByDescending(c => c.EventDate)
+                             .Where(c => c.Theme.Contains(theme));
+
+                return await query.ToArrayAsync();
         }
         public Task<Event[]> GetAllSpeakersAsyncByName(bool includeSpeakers)
         {
