@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ProAgil.WebAPI.Data;
 using ProAgil.WebAPI.Models;
 
@@ -27,9 +29,21 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
-        public Task<Event[]> GetAllEventAsync(bool includeSpeakers)
+        public async Task<Event[]> GetAllEventAsync(bool includeSpeakers = false)
         {
-            throw new System.NotImplementedException();
+            IQueryable<Event> query = _context.Events
+                .Include(c => c.Allotments)
+                .Include(c => c.SocialNetworks);
+
+                if (includeSpeakers) {
+                    query = query
+                    .Include(pe => pe.SpeakerEvents)
+                    .ThenInclude(p => p.Speaker)
+                }
+
+                query = query.OrderByDescending(c => c.EventDate);
+
+                return await query.ToArrayAsync();
         }
         public Task<Event[]> GetAllEventAsyncByTheme(string theme, bool includeSpeakers)
         {
