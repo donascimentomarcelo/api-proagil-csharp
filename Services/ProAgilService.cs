@@ -12,7 +12,7 @@ namespace ProAgil.WebAPI.Services
          Task<Event[]> GetAllEventAsyncByTheme(string theme, bool includeSpeakers);
          Task<Event[]> GetAllEventAsync(bool includeSpeakers);
          Task<Event> GetEventAsyncById(int EventId, bool includeSpeakers);
-         Task<Event[]> GetAllSpeakersAsyncByName(bool includeSpeakers);
-         Task<Event> GetSpeakerAsync(int SpeakerId, bool includeSpeakers);
+         Task<Speaker[]> GetAllSpeakersAsyncByName(string name, bool includeEvent);
+         Task<Speaker> GetSpeakerAsync(int SpeakerId, bool includeEvent);
     }
 }

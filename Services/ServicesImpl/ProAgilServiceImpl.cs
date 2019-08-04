@@ -38,7 +38,7 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
                 if (includeSpeakers) {
                     query = query
                     .Include(pe => pe.SpeakerEvents)
-                    .ThenInclude(p => p.Speaker)
+                    .ThenInclude(p => p.Speaker);
                 }
 
                 query = query.OrderByDescending(c => c.EventDate);
@@ -54,7 +54,7 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
                 if (includeSpeakers) {
                     query = query
                     .Include(pe => pe.SpeakerEvents)
-                    .ThenInclude(p => p.Speaker)
+                    .ThenInclude(p => p.Speaker);
                 }
 
                 query = query.OrderByDescending(c => c.EventDate)
@@ -62,9 +62,21 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
 
                 return await query.ToArrayAsync();
         }
-        public Task<Event[]> GetAllSpeakersAsyncByName(bool includeSpeakers)
+        public async Task<Speaker[]> GetAllSpeakersAsyncByName(string name, bool includeEvent = false)
         {
-            throw new System.NotImplementedException();
+            IQueryable<Speaker> query = _context.Speakers
+                .Include(c => c.SocialNetworks);
+
+                if (includeEvent) {
+                    query = query
+                    .Include(pe => pe.SpeakerEvents)
+                    .ThenInclude(e => e.Event);
+                }
+
+                query = query
+                        .Where(p => p.Name.ToLower().Contains(name.ToLower()));
+
+                return await query.ToArrayAsync();
         }
         public async Task<Event> GetEventAsyncById(int EventId, bool includeSpeakers)
         {
@@ -75,7 +87,7 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
                 if (includeSpeakers) {
                     query = query
                     .Include(pe => pe.SpeakerEvents)
-                    .ThenInclude(p => p.Speaker)
+                    .ThenInclude(p => p.Speaker);
                 }
 
                 query = query.OrderByDescending(c => c.EventDate)
@@ -83,9 +95,21 @@ namespace ProAgil.WebAPI.Services.ServicesImpl
 
                 return await query.FirstOrDefaultAsync();
         }
-        public Task<Event> GetSpeakerAsync(int SpeakerId, bool includeSpeakers)
+        public async Task<Speaker> GetSpeakerAsync(int SpeakerId, bool includeEvent = false)
         {
-            throw new System.NotImplementedException();
+            IQueryable<Speaker> query = _context.Speakers
+                .Include(c => c.SocialNetworks);
+
+                if (includeEvent) {
+                    query = query
+                    .Include(pe => pe.SpeakerEvents)
+                    .ThenInclude(e => e.Event);
+                }
+
+                query = query.OrderBy(p => p.Name)
+                        .Where(p => p.Id == SpeakerId);
+
+                return await query.FirstOrDefaultAsync();
         }
     }
 }

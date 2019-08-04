@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProAgil.WebAPI.Data;
+using ProAgil.WebAPI.Services;
+using ProAgil.WebAPI.Services.ServicesImpl;
 
 namespace ProAgil.WebAPI
 {
@@ -30,6 +32,7 @@ namespace ProAgil.WebAPI
             services.AddDbContext<DataContext>(
                 x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
             );
+            services.AddScoped<ProAgilService, ProAgilServiceImpl>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
