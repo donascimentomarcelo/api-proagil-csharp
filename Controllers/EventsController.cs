@@ -8,10 +8,10 @@ namespace ProAgil.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class EventsController : ControllerBase
     {
         public ProAgilService _proAgilService { get; }
-        public EventController(ProAgilService proAgilService)
+        public EventsController(ProAgilService proAgilService)
         {
             _proAgilService = proAgilService;
         }
