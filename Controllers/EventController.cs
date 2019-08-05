@@ -95,7 +95,7 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int EventId, Event Event)
+        public async Task<IActionResult> Delete(int EventId, Event Event)
         {
             try
             {
