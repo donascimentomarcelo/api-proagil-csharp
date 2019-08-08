@@ -75,7 +75,7 @@ namespace ProAgil.WebAPI.Controllers
                 _proAgilService.Add(Event);
                 if (await _proAgilService.SaveChangesAsync())
                 {
-                    return Created($"/api/event/{Event.Id}", Event);
+                    return Created($"/api/event/{Event.Id}", _mapper.Map<EventDto>(Event));
                 }
             }
             catch (System.Exception)
@@ -86,13 +86,16 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int EventId, Event Event)
+        public async Task<IActionResult> Put(int EventId, EventDto eventDto)
         {
             try
             {
-                var objectEvent = await _proAgilService.GetEventAsyncById(EventId, false);
-                if (objectEvent == null) return NotFound();
-                _proAgilService.Add(Event);
+                var Event = await _proAgilService.GetEventAsyncById(EventId, false);
+                if (Event == null) return NotFound();
+
+                _mapper.Map(eventDto, Event);
+
+                _proAgilService.Update(Event);
                 if (await _proAgilService.SaveChangesAsync())
                 {
                     return NoContent();
