@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProAgil.WebAPI.Dtos;
 using ProAgil.WebAPI.Models;
 using ProAgil.WebAPI.Services;
 
@@ -11,8 +14,10 @@ namespace ProAgil.WebAPI.Controllers
     public class EventsController : ControllerBase
     {
         public ProAgilService _proAgilService { get; }
-        public EventsController(ProAgilService proAgilService)
+        public IMapper _mapper { get; }
+        public EventsController(ProAgilService proAgilService, IMapper mapper)
         {
+            _mapper = mapper;
             _proAgilService = proAgilService;
         }
 
@@ -21,8 +26,9 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var list = await _proAgilService.GetAllEventAsync(true);
-                return Ok(list);
+                var events = await _proAgilService.GetAllEventAsync(true);
+                var eventsDto = _mapper.Map<IEnumerable<EventDto>>(events);
+                return Ok(eventsDto);
             }
             catch (System.Exception)
             {
@@ -35,8 +41,9 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var list = await _proAgilService.GetEventAsyncById(EventId, true);
-                return Ok(list);
+                var objectEvent = await _proAgilService.GetEventAsyncById(EventId, true);
+                var eventDto = _mapper.Map<EventDto>(objectEvent);
+                return Ok(eventDto);
             }
             catch (System.Exception)
             {
@@ -64,7 +71,8 @@ namespace ProAgil.WebAPI.Controllers
             try
             {
                 _proAgilService.Add(Event);
-                if (await _proAgilService.SaveChangesAsync()) {
+                if (await _proAgilService.SaveChangesAsync())
+                {
                     return Created($"/api/event/{Event.Id}", Event);
                 }
             }
@@ -83,7 +91,8 @@ namespace ProAgil.WebAPI.Controllers
                 var objectEvent = await _proAgilService.GetEventAsyncById(EventId, false);
                 if (objectEvent == null) return NotFound();
                 _proAgilService.Add(Event);
-                if (await _proAgilService.SaveChangesAsync()) {
+                if (await _proAgilService.SaveChangesAsync())
+                {
                     return NoContent();
                 }
             }
@@ -102,7 +111,8 @@ namespace ProAgil.WebAPI.Controllers
                 var objectEvent = await _proAgilService.GetEventAsyncById(EventId, false);
                 if (objectEvent == null) return NotFound();
                 _proAgilService.Delete(Event);
-                if (await _proAgilService.SaveChangesAsync()) {
+                if (await _proAgilService.SaveChangesAsync())
+                {
                     return NoContent();
                 }
             }
