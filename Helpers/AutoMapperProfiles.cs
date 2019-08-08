@@ -12,13 +12,17 @@ namespace ProAgil.WebAPI.Helpers
             CreateMap<Event, EventDto>()
                 .ForMember(recipient => recipient.Speakers, opt => {
                     opt.MapFrom(src => src.SpeakerEvents.Select(x => x.Speaker).ToList());
-                });
+                })
+                .ReverseMap();
             CreateMap<Speaker, SpeakerDto>()
                 .ForMember(recipient => recipient.Events, opt => {
                     opt.MapFrom(src => src.SpeakerEvents.Select(x => x.Event).ToList());
-                });
-            CreateMap<Allotment, AllotmentDto>();
-            CreateMap<SocialNetwork, SocialNetworkDto>();
+                })
+                .ReverseMap();
+            CreateMap<Allotment, AllotmentDto>()
+            .ReverseMap();
+            CreateMap<SocialNetwork, SocialNetworkDto>()
+            .ReverseMap();
         }
     }
 }
