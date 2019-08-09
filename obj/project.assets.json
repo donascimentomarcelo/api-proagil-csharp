@@ -12559,6 +12559,7 @@
     ".NETCoreApp,Version=v2.2": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 4.0.0",
       "Microsoft.AspNetCore.App >= 2.2.0",
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
       "Microsoft.EntityFrameworkCore.Sqlite >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
@@ -12572,11 +12573,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\projetos\\Dotnet\\ProAgil.WebAPI\\ProAgil.WebAPI.csproj",
+      "projectUniqueName": "C:\\projetos\\Dotnet\\ProAgil.WebAPI\\ProAgil.WebAPI.csproj",
       "projectName": "ProAgil.WebAPI",
-      "projectPath": "c:\\projetos\\Dotnet\\ProAgil.WebAPI\\ProAgil.WebAPI.csproj",
+      "projectPath": "C:\\projetos\\Dotnet\\ProAgil.WebAPI\\ProAgil.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Mestre\\.nuget\\packages\\",
-      "outputPath": "c:\\projetos\\Dotnet\\ProAgil.WebAPI\\obj\\",
+      "outputPath": "C:\\projetos\\Dotnet\\ProAgil.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12615,6 +12616,10 @@
             "target": "Package",
             "version": "[2.2.0, )",
             "autoReferenced": true
+          },
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[2.2.0, )"
           },
           "Microsoft.AspNetCore.Razor.Design": {
             "suppressParent": "All",
