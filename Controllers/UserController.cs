@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProAgil.WebAPI.Dtos;
 using ProAgil.WebAPI.Identity;
 
 namespace ProAgil.WebAPI.Controllers
@@ -28,9 +30,23 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpGet("GetUsers")]
-        public async Task<IActionResult> GetUser()
+        public async Task<IActionResult> GetUser(UserDto UserDto)
         {
-            return Ok(new User());
+            return Ok(UserDto);
+        }
+
+        [HttpPost("Register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(UserDto UserDto)
+        {
+            var User = _mapper.Map<User>(UserDto);
+            var Result = await _userManager.CreateAsync(User, UserDto.Password);
+            var UserToReturn = _mapper.Map<UserDto>(User);
+            if (Result.Succeeded) 
+            {
+                return Created("GetUser", UserToReturn);
+            }
+            return BadRequest(Result.Errors);
         }
     }
 }
