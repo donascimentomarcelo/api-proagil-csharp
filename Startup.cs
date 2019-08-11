@@ -96,6 +96,8 @@ namespace ProAgil.WebAPI
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+
             // app.UseHttpsRedirection();
             app.UseMvc();
         }

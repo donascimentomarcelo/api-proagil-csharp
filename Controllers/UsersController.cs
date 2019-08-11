@@ -18,14 +18,14 @@ namespace ProAgil.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
 
-        public UserController(IConfiguration config,
+        public UsersController(IConfiguration config,
                               UserManager<User> userManager,
                               SignInManager<User> signInManager,
                               IMapper mapper)
@@ -70,7 +70,7 @@ namespace ProAgil.WebAPI.Controllers
                 var userToReturn = _mapper.Map<UserLoginDto>(AppUser);
 
                 return Ok(new {
-                    token = GenerateJwtToken(AppUser),
+                    token = GenerateJwtToken(AppUser).Result,
                     UserName = userToReturn
                 });
             }
