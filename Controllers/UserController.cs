@@ -57,6 +57,7 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserLoginDto UserLoginDto)
         {
             var User = await _userManager.FindByNameAsync(UserLoginDto.UserName);
