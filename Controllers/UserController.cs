@@ -1,12 +1,18 @@
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ProAgil.WebAPI.Dtos;
 using ProAgil.WebAPI.Identity;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ProAgil.WebAPI.Controllers
 {
@@ -72,7 +78,36 @@ namespace ProAgil.WebAPI.Controllers
 
         private async Task<string> GenerateJwtToken(User User)
         {
-            return "";
+            var claims = new List<Claim> 
+            {
+                new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()),
+                new Claim(ClaimTypes.Name, User.UserName)
+            };
+
+            var roles = await _userManager.GetRolesAsync(User);
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.ASCII
+                            .GetBytes(_config.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }
