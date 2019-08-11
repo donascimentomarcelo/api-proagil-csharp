@@ -4,6 +4,7 @@ using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProAgil.WebAPI.Dtos;
 using ProAgil.WebAPI.Identity;
 
@@ -47,6 +48,31 @@ namespace ProAgil.WebAPI.Controllers
                 return Created("GetUser", UserToReturn);
             }
             return BadRequest(Result.Errors);
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(UserLoginDto UserLoginDto)
+        {
+            var User = await _userManager.FindByNameAsync(UserLoginDto.UserName);
+            var Result = await _signInManager.CheckPasswordSignInAsync(User, UserLoginDto.Password, false);
+
+            if (Result.Succeeded)
+            {
+                var AppUser = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.NormalizedUserName == UserLoginDto.UserName);
+                var userToReturn = _mapper.Map<UserLoginDto>(AppUser);
+
+                return Ok(new {
+                    token = GenerateJwtToken(AppUser),
+                    UserName = userToReturn
+                });
+            }
+            return Unauthorized();
+        }
+
+        private async Task<string> GenerateJwtToken(User User)
+        {
+            return "";
         }
     }
 }
